@@ -113,6 +113,11 @@ public class Deque<Item> implements Iterable<Item> {
             current = current.getNext();
             return node;
         }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
+        }
     }
 
     public static void main(String[] args) {   // unit testing (optional)
