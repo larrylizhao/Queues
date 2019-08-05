@@ -104,7 +104,7 @@ public class Deque<Item> implements Iterable<Item> {
 
         @Override
         public boolean hasNext() {
-            return current != null;
+            return current != null && current.getValue() != null;
         }
 
         @Override
@@ -121,8 +121,19 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     public static void main(String[] args) {   // unit testing (optional)
-
-
+        Deque<String> deque = new Deque<>();
+        System.out.println(deque.isEmpty());
+        deque.addFirst("test_1");
+        deque.addFirst("test_2");
+        deque.addFirst("test_3");
+        deque.addLast("test_4");
+        deque.addLast("test_5");
+        deque.addLast("test_6");
+        System.out.println(deque.size());
+        Iterator<String> dIterator = deque.iterator();
+        while (dIterator.hasNext()) {
+            System.out.println(dIterator.next());
+        }
     }
 }
 
