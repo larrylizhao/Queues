@@ -8,8 +8,8 @@ public class Deque<Item> implements Iterable<Item> {
 
 
     public Deque() {                         // construct an empty deque
-        this.head = null;
-        this.tail = null;
+        this.head = new Node<>();
+        this.tail = new Node<>();
     }
 
     public boolean isEmpty() {                 // is the deque empty?
@@ -24,17 +24,19 @@ public class Deque<Item> implements Iterable<Item> {
         if (item == null) {
             throw new IllegalArgumentException("Should not add null element");
         }
-        Node<Item> node = new Node<>(item, null, head);
-        if (head == null || head.getNext() == null) {
-            head = new Node<>(null, node, null);
-        } else {
-            node.setNext(head.getNext());
-            node.setPrev(head);
-            head.setNext(node);
-        }
 
-        if (tail == null || tail.getPrev() == null) {
-            tail = new Node<>(null, null, node);
+        //Create the node to be inserted
+        Node<Item> node = new Node<>(item, null, null);
+        if (length == 0) {
+            node.setPrev(head);
+            node.setNext(tail);
+            head.setNext(node);
+            tail.setPrev(node);
+        } else {
+            head.getNext().setPrev(node);
+            node.setPrev(head);
+            node.setNext(head.getNext());
+            head.setNext(node);
         }
         length++;
     }
@@ -43,16 +45,17 @@ public class Deque<Item> implements Iterable<Item> {
         if (item == null) {
             throw new IllegalArgumentException("Should not add null element");
         }
-        Node<Item> node = new Node<>(item, tail, null);
-        if (tail == null || tail.getPrev() == null) {
-            tail = new Node<>(null, null, node);
+        Node<Item> node = new Node<>(item, null, null);
+        if (length == 0) {
+            node.setPrev(head);
+            node.setNext(tail);
+            head.setNext(node);
+            tail.setPrev(node);
         } else {
+            node.setPrev(tail.getPrev());
+            node.setNext(tail);
             tail.getPrev().setNext(node);
             tail.setPrev(node);
-        }
-
-        if (head == null || head.getNext() == null) {
-            head = new Node<>(null, node, null);
         }
         length++;
     }
@@ -96,7 +99,7 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     class DequeIterator implements Iterator<Item> {
-        Node<Item> current = new Node<>();
+        Node<Item> current;
 
         public DequeIterator() {
             this.current = head.getNext();
@@ -109,9 +112,9 @@ public class Deque<Item> implements Iterable<Item> {
 
         @Override
         public Item next() {
-            Item node = current.getValue();
+            Item value = current.getValue();
             current = current.getNext();
-            return node;
+            return value;
         }
 
         @Override
@@ -131,6 +134,16 @@ public class Deque<Item> implements Iterable<Item> {
         deque.addLast("test_6");
         System.out.println(deque.size());
         Iterator<String> dIterator = deque.iterator();
+        while (dIterator.hasNext()) {
+            System.out.println(dIterator.next());
+        }
+
+        deque.removeFirst();
+        deque.removeFirst();
+        deque.removeLast();
+        deque.removeLast();
+        System.out.println(deque.size());
+        dIterator = deque.iterator();
         while (dIterator.hasNext()) {
             System.out.println(dIterator.next());
         }
